@@ -14,7 +14,7 @@
   then its toolchain pre-installed — **venue Wi-Fi is always bad; install everything early**
 - [ ] A "hello world" of your stack already built once (proves the toolchain works offline)
 - [ ] This framework installed into a throwaway repo and test-run once:
-  `./install.sh /tmp/test && cd /tmp/test && ./scripts/ralph/doctor.sh`
+  `./install.sh /tmp/test && cd /tmp/test && ./scripts/twinloop/doctor.sh`
 
 ## 2. Decide the tech stack TOGETHER (human + AI)
 
@@ -92,7 +92,7 @@ Hour 0-1   HUMAN+AI: requirements interview → pitch sentence + demo script +
 Hour 1     HUMAN+AI: pipeline FIRST (repo layout, test runner, lint, run script —
            hello-world proves it) → prd.json (stories ordered by DEMO VALUE,
            happy path first) → doctor.sh → must be all ✅
-Hour 1-6   AI LOOP: ralph.sh --max-daily 40 15
+Hour 1-6   AI LOOP: twinloop.sh --max-daily 40 15
            HUMAN: build the pitch/deck while the loop builds the product
 Hour 6+    HUMAN: status.sh every hour; clear any 🚨 in user-notes.md
 Final 2h   FREEZE features. Loop only on demo-blockers.
@@ -114,10 +114,10 @@ Final 2h   FREEZE features. Loop only on demo-blockers.
 ## 5. Pre-written emergency commands
 
 ```bash
-./scripts/ralph/status.sh                     # where are we? (0 tokens)
-./scripts/ralph/doctor.sh                     # is the setup sane?
-./scripts/ralph/ralph.sh --max-daily 40 15    # hackathon loop run
-./scripts/ralph/prompt-gate.sh "story idea"   # is this story well-defined?
+./scripts/twinloop/status.sh                     # where are we? (0 tokens)
+./scripts/twinloop/doctor.sh                     # is the setup sane?
+./scripts/twinloop/twinloop.sh --max-daily 40 15    # hackathon loop run
+./scripts/twinloop/prompt-gate.sh "story idea"   # is this story well-defined?
 git log --oneline                             # what got built?
 ```
 

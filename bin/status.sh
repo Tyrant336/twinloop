@@ -1,6 +1,6 @@
 #!/bin/bash
 # status.sh - token-free project dashboard. No AI session needed.
-# Usage: ./status.sh   (lives in scripts/ralph/, reads state from there + project root)
+# Usage: ./status.sh   (lives in scripts/twinloop/, reads state from there + project root)
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PRD_FILE="$SCRIPT_DIR/prd.json"
@@ -11,7 +11,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." 2>/dev/null && pwd || echo "$SCRIPT_DIR")
 FINAL_REPORT="$PROJECT_ROOT/FINAL-REPORT.md"
 
 echo "==============================================================="
-echo "  Ralph status — $(date '+%Y-%m-%d %H:%M')"
+echo "  Twinloop status — $(date '+%Y-%m-%d %H:%M')"
 echo "==============================================================="
 
 # Stories

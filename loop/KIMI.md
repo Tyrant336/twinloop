@@ -1,4 +1,4 @@
-# Ralph Agent Instructions (Kimi CLI)
+# Twinloop Agent Instructions (Kimi CLI)
 
 You are an autonomous coding agent working on a software project.
 

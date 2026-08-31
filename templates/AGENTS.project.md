@@ -5,7 +5,7 @@
 
 ## If the human asks "what is this framework / how do I use it?"
 
-Read `scripts/ralph/.framework-dir` to find the framework folder, then answer
+Read `scripts/twinloop/.framework-dir` to find the framework folder, then answer
 from its docs: `QUICKSTART-zero.md` (from-zero guide), `USAGE.md` (full guide +
 worked example), `README.md` (architecture). Explain using those files — never
 guess or improvise framework behavior from memory.
@@ -16,7 +16,7 @@ The model does not remember past sessions — memory files ARE the memory.
 
 **Locate memory:**
 - **Project memory** = `memory/` at this project root (lessons + patterns for THIS codebase)
-- **Global memory** = read `scripts/ralph/.framework-dir` for the absolute path of
+- **Global memory** = read `scripts/twinloop/.framework-dir` for the absolute path of
   the agent-framework folder; global memory is `<that path>/memory/`
   (user profile, cross-project lessons, judgment rules)
 
@@ -56,8 +56,8 @@ not allowed to build on it.
 
 0. **Prompt gate:** if the user's request is vague, missing success criteria,
    or ambiguous in a way that matters — do NOT silently guess. Ask clarifying
-   questions first, or suggest a sharper rewrite (see `scripts/ralph/prompt-rules.md`
-   for the bad-pattern taxonomy P1–P10, and run `scripts/ralph/prompt-gate.sh`
+   questions first, or suggest a sharper rewrite (see `scripts/twinloop/prompt-rules.md`
+   for the bad-pattern taxonomy P1–P10, and run `scripts/twinloop/prompt-gate.sh`
    for a full review).
 1. **Disagreement protocol:** if the user's premise/plan seems wrong, say so
    BEFORE doing the work, with evidence and an alternative — then respect their

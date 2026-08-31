@@ -1,7 +1,7 @@
 #!/bin/bash
-# doctor.sh - pre-flight check before running the Ralph loop.
+# doctor.sh - pre-flight check before running the Twinloop loop.
 # Catches broken setups BEFORE they burn agent sessions.
-# Usage: ./doctor.sh   (run from anywhere; checks the ralph dir it lives in + its project root)
+# Usage: ./doctor.sh   (run from anywhere; checks the twinloop dir it lives in + its project root)
 
 PASS=0; WARN=0; FAIL=0
 
@@ -13,12 +13,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." 2>/dev/null && pwd || echo "$SCRIPT_DIR")"
 PRD_FILE="$SCRIPT_DIR/prd.json"
 
-echo "Ralph doctor — checking $SCRIPT_DIR"
+echo "Twinloop doctor — checking $SCRIPT_DIR"
 echo "Project root: $PROJECT_ROOT"
 echo ""
 
 # 1. Required tools
-command -v jq >/dev/null 2>&1 && ok "jq installed" || bad "jq NOT installed (required by ralph.sh)"
+command -v jq >/dev/null 2>&1 && ok "jq installed" || bad "jq NOT installed (required by twinloop.sh)"
 AGENT_CLI_FOUND=0
 for cli in kimi claude amp cursor-agent; do
   if command -v "$cli" >/dev/null 2>&1; then ok "$cli CLI installed"; AGENT_CLI_FOUND=1; fi
@@ -36,7 +36,7 @@ if [ -d "$PROJECT_ROOT/.git" ]; then
     warn "git user.name not set — commits may fail"
   fi
 else
-  bad "project is NOT a git repository (Ralph commits after each story — run: git init)"
+  bad "project is NOT a git repository (Twinloop commits after each story — run: git init)"
 fi
 
 # 3. Framework link
@@ -118,7 +118,7 @@ elif [ -f "$PRD_FILE" ] && jq empty "$PRD_FILE" 2>/dev/null; then
   DONE=$(jq '[.userStories[] | select(.passes==true)] | length' "$PRD_FILE" 2>/dev/null || echo 0)
   BLOCKED=$(jq '[.userStories[] | select(.blocked==true)] | length' "$PRD_FILE" 2>/dev/null || echo 0)
   if [ "${TOTAL:-0}" -gt 0 ] && [ $((DONE + BLOCKED)) -ge "$TOTAL" ]; then
-    warn "all stories done but no FINAL-REPORT.md — the verify phase hasn't run yet (ralph.sh runs it by default; use --no-verify to skip)"
+    warn "all stories done but no FINAL-REPORT.md — the verify phase hasn't run yet (twinloop.sh runs it by default; use --no-verify to skip)"
   fi
 fi
 
@@ -126,12 +126,12 @@ echo ""
 echo "----------------------------------------"
 echo "Result: $PASS ok, $WARN warnings, $FAIL failures"
 if [ "$FAIL" -gt 0 ]; then
-  echo "❌ Fix the failures above before running ralph.sh"
+  echo "❌ Fix the failures above before running twinloop.sh"
   exit 1
 elif [ "$WARN" -gt 0 ]; then
   echo "⚠️  Runnable, but review the warnings"
   exit 0
 else
-  echo "✅ All good — run: ./scripts/ralph/ralph.sh 10"
+  echo "✅ All good — run: ./scripts/twinloop/twinloop.sh 10"
   exit 0
 fi

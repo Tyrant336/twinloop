@@ -9,7 +9,7 @@ NOT proof. Be skeptical. Assume nothing — verify everything.
 ## Locate things
 
 - `prd.json`, `.evaluated-stories`, `progress.txt`, `user-notes.md` are in the
-  same directory as this file (the ralph directory). The PROJECT ROOT is the
+  same directory as this file (the twinloop directory). The PROJECT ROOT is the
   current working directory.
 - Global judgment rules: read `.framework-dir` (same directory as this file),
   then read `memory/judgment.md` inside that folder if it exists.

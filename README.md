@@ -1,13 +1,13 @@
-# Ralph — Agent Framework (Kimi fork)
+# Twinloop — Agent Framework (Kimi fork)
 
-![Ralph](assets/ralph.webp)
+![Twinloop](assets/twinloop.webp)
 
 > **This is a fork of [snarktank/ralph](https://github.com/snarktank/ralph).**
 > **This fork** runs with [Kimi CLI](https://github.com/MoonshotAI/kimi-cli) as the coding agent (default `--tool kimi`), and extends the original Ralph loop into a **portable agent framework**: loop + memory + judgment + user notifications, installable into any project with one command.
 >
 > **📖 Start here:** never used this (or any) agent framework before? → **[QUICKSTART-zero.md](docs/QUICKSTART-zero.md)** — assumes nothing, first loop in ~20 min. Otherwise: [USAGE.md](docs/USAGE.md) — full guide with a worked example.
 
-Ralph is an autonomous AI agent loop that runs AI coding tools (Kimi CLI by default; [Amp](https://ampcode.com), [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Cursor CLI](https://cursor.com/docs/cli/headless) also supported via `--tool`) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context. Memory persists via git history, `progress.txt`, and `prd.json`.
+Twinloop is an autonomous AI agent loop that runs AI coding tools (Kimi CLI by default; [Amp](https://ampcode.com), [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Cursor CLI](https://cursor.com/docs/cli/headless) also supported via `--tool`) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context. Memory persists via git history, `progress.txt`, and `prd.json`.
 
 ## The Pipeline (what it is, end to end)
 
@@ -25,7 +25,7 @@ This framework is a **pipeline**, not a single command. It enforces software-eng
   →  pipeline (tests, lint)     daily-cap
   →  stories (prd.json)      7️⃣  VERIFY: full suite +
  2️⃣  doctor.sh (pre-flight)      smoke test + integration
- 3️⃣  ralph.sh (start loop)       review → FINAL-REPORT.md
+ 3️⃣  twinloop.sh (start loop)       review → FINAL-REPORT.md
                                  (fail → stories reopen,
                                   loop resumes)
 ```
@@ -61,11 +61,11 @@ mkdir ccna-quiz && cd ccna-quiz && git init
 #      You review each section and tick its checkbox.
 
 # 3. Pre-flight, then let it run
-./scripts/ralph/doctor.sh        # ✅ blueprint fully approved, prd.json valid, ...
-./scripts/ralph/ralph.sh 10      # the loop builds story by story
+./scripts/twinloop/doctor.sh        # ✅ blueprint fully approved, prd.json valid, ...
+./scripts/twinloop/twinloop.sh 10      # the loop builds story by story
 
 # 4. Check in anytime (zero tokens)
-./scripts/ralph/status.sh
+./scripts/twinloop/status.sh
 ```
 
 What you get afterwards: one git commit per story (`feat: US-001 - Question loader from JSON`), a full diary in `progress.txt` (including any evaluator rejections and why), a skimmable inbox in `user-notes.md`, an end-to-end verified `FINAL-REPORT.md` waiting for your acceptance checkbox, and lessons already written to `memory/` so the next run is smarter. The full version of this example — including the prd.json, doctor output, and an evaluator rejection/retry — is in **[USAGE.md](docs/USAGE.md#full-worked-example-a-ccna-quiz-cli)**.
@@ -82,20 +82,20 @@ Prerequisites: `kimi` CLI installed and authenticated, `jq` installed (`winget i
 
 This installs into the target project:
 - `blueprint.md` — the Blueprint Gate document (requirements → stack → architecture → pipeline, human-approved before any code)
-- `scripts/ralph/` — `ralph.sh`, `KIMI.md`, `EVALUATE.md`, `VERIFY.md`, `doctor.sh`, `status.sh`, `PROMPT_GATE.md`, `prompt-rules.md`, `prompt-gate.sh`, and `.framework-dir` (portable link back to this framework's global memory)
+- `scripts/twinloop/` — `twinloop.sh`, `KIMI.md`, `EVALUATE.md`, `VERIFY.md`, `doctor.sh`, `status.sh`, `PROMPT_GATE.md`, `prompt-rules.md`, `prompt-gate.sh`, and `.framework-dir` (portable link back to this framework's global memory)
 - `memory/` — empty project memory (lessons + patterns, grows as the agent works)
 - `AGENTS.md` — memory + judgment + notification + Blueprint Gate rules for any agent working in that project
 
-Then open the project in your AI tool and describe your idea — the Blueprint Gate runs the requirements/stack/architecture/pipeline phase **with you**, fills `blueprint.md`, and only then produces `scripts/ralph/prd.json`. After that:
+Then open the project in your AI tool and describe your idea — the Blueprint Gate runs the requirements/stack/architecture/pipeline phase **with you**, fills `blueprint.md`, and only then produces `scripts/twinloop/prd.json`. After that:
 
 ```bash
 cd /path/to/your/project
-./scripts/ralph/doctor.sh                        # pre-flight: tools, git, prd quality, test setup
-./scripts/ralph/ralph.sh [max_iterations]        # defaults: --tool kimi, 10 iterations
-./scripts/ralph/ralph.sh --tool cursor 10        # use Cursor CLI (cursor-agent) instead
-./scripts/ralph/ralph.sh --max-daily 30 20       # optional cost guard: max 30 agent sessions/day
-./scripts/ralph/ralph.sh --no-verify 10          # optional: skip the end-to-end verify phase
-./scripts/ralph/status.sh                        # token-free dashboard (no AI session needed)
+./scripts/twinloop/doctor.sh                        # pre-flight: tools, git, prd quality, test setup
+./scripts/twinloop/twinloop.sh [max_iterations]        # defaults: --tool kimi, 10 iterations
+./scripts/twinloop/twinloop.sh --tool cursor 10        # use Cursor CLI (cursor-agent) instead
+./scripts/twinloop/twinloop.sh --max-daily 30 20       # optional cost guard: max 30 agent sessions/day
+./scripts/twinloop/twinloop.sh --no-verify 10          # optional: skip the end-to-end verify phase
+./scripts/twinloop/status.sh                        # token-free dashboard (no AI session needed)
 ```
 
 ### Loop features (this fork)
@@ -118,7 +118,7 @@ cd /path/to/your/project
 agent-framework/
 ├── install.sh                  # one-command installer into any project
 ├── bin/                        # executable scripts
-│   ├── ralph.sh                #   the loop: builder + evaluator + verify phase, stuck detection, cost guard
+│   ├── twinloop.sh                #   the loop: builder + evaluator + verify phase, stuck detection, cost guard
 │   ├── doctor.sh               #   pre-flight checks
 │   ├── status.sh               #   token-free status dashboard
 │   └── prompt-gate.sh          #   prompt reviewer (uses loop/PROMPT_GATE.md + loop/prompt-rules.md)
@@ -132,7 +132,7 @@ agent-framework/
 │   ├── USAGE.md                #   full guide with worked example
 │   ├── QUICKSTART-zero.md      #   zero-to-running quickstart
 │   └── HACKATHON.md            #   🏆 playbook: using the pipeline to win a hackathon
-├── assets/                     # images (ralph-flowchart.png, ralph.webp)
+├── assets/                     # images (twinloop-flowchart.png, twinloop.webp)
 ├── examples/
 │   └── prd.json.example        # task-list format
 ├── memory/                     # 🌍 GLOBAL memory — travels with this folder
@@ -145,12 +145,12 @@ agent-framework/
 │   ├── BLUEPRINT.md            # the Blueprint Gate document (seeded as blueprint.md)
 │   ├── AGENTS.project.md       # rules installed into target projects (incl. Blueprint Gate)
 │   └── project-memory/         # empty per-project memory seeds
-├── skills/                     # prd + ralph skills (Amp/Claude ecosystem, from upstream)
+├── skills/                     # prd + twinloop skills (Amp/Claude ecosystem, from upstream)
 ├── archive/                    # archived per-tool prompts (Amp/Claude) + run archives
 └── flowchart/                  # interactive React Flow diagram of the loop
 ```
 
-**Portability:** nothing in the framework hardcodes paths to a specific machine folder. Projects find the framework's global memory through `scripts/ralph/.framework-dir`, written by `install.sh`. Move/clone this folder anywhere, re-run `install.sh` in your projects, done.
+**Portability:** nothing in the framework hardcodes paths to a specific machine folder. Projects find the framework's global memory through `scripts/twinloop/.framework-dir`, written by `install.sh`. Move/clone this folder anywhere, re-run `install.sh` in your projects, done.
 
 **User notifications:** every iteration appends a dated, skimmable entry to `user-notes.md` (next to prd.json): what was done, what needs your attention, and the suggested next step. Check this file first when you come back after being away — or just ask your agent "catch me up on this project" and it can read `prd.json` + `progress.txt` + `user-notes.md` to summarize.
 
@@ -158,14 +158,14 @@ agent-framework/
 
 The loop accepts `--tool amp` and `--tool claude` and will invoke those CLIs — but note that **all tools receive `KIMI.md` as the builder prompt** (it is tool-agnostic markdown). The original Amp- and Claude-specific prompts from upstream are kept in [`archive/`](archive/README.md) for reference, but are not wired into the loop.
 
-The `skills/` directory (`prd`, `ralph`) works with the Amp/Claude skill system. To install manually:
+The `skills/` directory (`prd`, `twinloop`) works with the Amp/Claude skill system. To install manually:
 
 ```bash
 # Amp
-cp -r skills/prd skills/ralph ~/.config/amp/skills/
+cp -r skills/prd skills/twinloop ~/.config/amp/skills/
 
 # Claude Code
-cp -r skills/prd skills/ralph ~/.claude/skills/
+cp -r skills/prd skills/twinloop ~/.claude/skills/
 ```
 
 (The upstream project also publishes a Claude Code marketplace listing — that belongs to the [original repo](https://github.com/snarktank/ralph), not this fork.)
@@ -180,26 +180,26 @@ Load the prd skill and create a PRD for [your feature description]
 
 Answer the clarifying questions. The skill saves output to `tasks/prd-[feature-name].md`.
 
-### 2. Convert PRD to Ralph format
+### 2. Convert PRD to Twinloop format
 
 ```
-Load the ralph skill and convert tasks/prd-[feature-name].md to prd.json
+Load the twinloop skill and convert tasks/prd-[feature-name].md to prd.json
 ```
 
 This creates `prd.json` with user stories structured for autonomous execution.
 
-### 3. Run Ralph
+### 3. Run Twinloop
 
 ```bash
 # Using Kimi (default)
-./scripts/ralph/ralph.sh [max_iterations]
+./scripts/twinloop/twinloop.sh [max_iterations]
 
 # Using Amp or Claude Code
-./scripts/ralph/ralph.sh --tool amp [max_iterations]
-./scripts/ralph/ralph.sh --tool claude [max_iterations]
+./scripts/twinloop/twinloop.sh --tool amp [max_iterations]
+./scripts/twinloop/twinloop.sh --tool claude [max_iterations]
 ```
 
-Default is 10 iterations. Ralph will:
+Default is 10 iterations. Twinloop will:
 1. Verify the Blueprint Gate (stops immediately if blueprint approvals are missing)
 2. Create a feature branch (from PRD `branchName`)
 3. Pick the highest priority story where `passes: false`
@@ -214,7 +214,7 @@ Default is 10 iterations. Ralph will:
 
 | File | Purpose |
 |------|---------|
-| `bin/ralph.sh` | The bash loop that spawns fresh AI instances (`--tool kimi` default, `amp`/`claude`/`cursor` supported) |
+| `bin/twinloop.sh` | The bash loop that spawns fresh AI instances (`--tool kimi` default, `amp`/`claude`/`cursor` supported) |
 | `loop/KIMI.md` | The canonical builder prompt (used for ALL tools) — includes Blueprint Gate step 0 |
 | `loop/EVALUATE.md` | Evaluator prompt for the independent review pass |
 | `loop/VERIFY.md` | Verifier prompt for the end-to-end final check; writes `FINAL-REPORT.md` |
@@ -225,13 +225,13 @@ Default is 10 iterations. Ralph will:
 | `user-notes.md` | Dated, skimmable inbox of what the loop did and what needs you |
 | `blueprint.md` | Blueprint Gate approvals (installed into projects) |
 | `skills/prd/` | Skill for generating PRDs (Amp/Claude ecosystems) |
-| `skills/ralph/` | Skill for converting PRDs to JSON (Amp/Claude ecosystems) |
+| `skills/twinloop/` | Skill for converting PRDs to JSON (Amp/Claude ecosystems) |
 | `archive/` | Archived upstream per-tool prompts + per-run archives |
-| `flowchart/` | Interactive visualization of how Ralph works |
+| `flowchart/` | Interactive visualization of how Twinloop works |
 
 ## Flowchart
 
-![Ralph Flowchart](assets/ralph-flowchart.png)
+![Twinloop Flowchart](assets/twinloop-flowchart.png)
 
 The `flowchart/` directory contains an interactive React Flow visualization (source in this repo). To run locally:
 
@@ -268,11 +268,11 @@ Too big (split these):
 
 ### AGENTS.md Updates Are Critical
 
-After each iteration, Ralph updates the relevant `AGENTS.md` files with learnings. This is key because AI coding tools automatically read these files, so future iterations (and future human developers) benefit from discovered patterns, gotchas, and conventions.
+After each iteration, Twinloop updates the relevant `AGENTS.md` files with learnings. This is key because AI coding tools automatically read these files, so future iterations (and future human developers) benefit from discovered patterns, gotchas, and conventions.
 
 ### Feedback Loops
 
-Ralph only works if there are feedback loops:
+Twinloop only works if there are feedback loops:
 - Typecheck catches type errors
 - Tests verify behavior
 - CI must stay green (broken code compounds across iterations)
@@ -292,7 +292,7 @@ Check current state:
 
 ```bash
 # Token-free dashboard (preferred)
-./scripts/ralph/status.sh
+./scripts/twinloop/status.sh
 
 # See which stories are done
 cat prd.json | jq '.userStories[] | {id, title, passes, blocked}'
@@ -306,7 +306,7 @@ git log --oneline -10
 
 ## Customizing the Prompt
 
-`KIMI.md` (installed into projects at `scripts/ralph/KIMI.md`) is the canonical builder prompt. Customize it for your project:
+`KIMI.md` (installed into projects at `scripts/twinloop/KIMI.md`) is the canonical builder prompt. Customize it for your project:
 - Add project-specific quality check commands
 - Include codebase conventions
 - Add common gotchas for your stack
@@ -317,12 +317,12 @@ If you run a project with `--tool amp`, `--tool claude` or `--tool cursor`, that
 
 ## Archiving
 
-Ralph automatically archives previous runs when you start a new feature (different `branchName`). Archives are saved to `archive/YYYY-MM-DD-feature-name/` inside the project's `scripts/ralph/` directory.
+Twinloop automatically archives previous runs when you start a new feature (different `branchName`). Archives are saved to `archive/YYYY-MM-DD-feature-name/` inside the project's `scripts/twinloop/` directory.
 
 ## Credits & References
 
 - Forked from [snarktank/ralph](https://github.com/snarktank/ralph) (MIT, © snarktank)
-- Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/)
+- Based on [Geoffrey Huntley's Twinloop pattern](https://ghuntley.com/twinloop/)
 - [Upstream author's in-depth article on how he uses Ralph](https://x.com/ryancarson/status/2008548371712135632)
 - [Amp documentation](https://ampcode.com/manual)
 - [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code)

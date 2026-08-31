@@ -1,7 +1,7 @@
 # How to Use This Framework
 
 > A practical guide to the agent-framework: an autonomous, self-improving
-> coding loop built on Ralph + Kimi CLI. Read top to bottom once — after that,
+> coding loop built on Twinloop + Kimi CLI. Read top to bottom once — after that,
 > the cheat sheet at the end is all you need.
 
 ---
@@ -59,8 +59,8 @@ your-project/
 ├── blueprint.md              ← the Blueprint Gate document (approve before any code)
 ├── memory/                   ← project memory (lessons, patterns — grows)
 ├── .gitignore                ← agent-framework block (loop state stays local)
-└── scripts/ralph/
-    ├── ralph.sh              ← the loop
+└── scripts/twinloop/
+    ├── twinloop.sh              ← the loop
     ├── KIMI.md               ← builder instructions
     ├── EVALUATE.md           ← independent reviewer instructions
     ├── doctor.sh             ← pre-flight check
@@ -75,14 +75,14 @@ your-project/
 ### 3. Write your task list (prd.json)
 
 ```bash
-cp agent-framework/prd.json.example your-project/scripts/ralph/prd.json
+cp agent-framework/prd.json.example your-project/scripts/twinloop/prd.json
 ```
 
 Edit it — this is the ONE thing you must do well (see "Writing a good PRD"):
 
 ```json
 {
-  "branchName": "ralph/my-feature",
+  "branchName": "twinloop/my-feature",
   "userStories": [
     {
       "id": "US-001",
@@ -99,7 +99,7 @@ Edit it — this is the ONE thing you must do well (see "Writing a good PRD"):
 
 ```bash
 cd /path/to/your/project
-./scripts/ralph/doctor.sh
+./scripts/twinloop/doctor.sh
 ```
 
 Fix anything ❌. Warnings ⚠️ are optional but read them (especially "no test
@@ -108,7 +108,7 @@ setup detected" — without tests, the loop can't verify its work).
 ### 5. Run the loop
 
 ```bash
-./scripts/ralph/ralph.sh 10
+./scripts/twinloop/twinloop.sh 10
 ```
 
 Walk away. Watch it, or don't — `user-notes.md` will tell you what happened.
@@ -116,7 +116,7 @@ Walk away. Watch it, or don't — `user-notes.md` will tell you what happened.
 ### 6. Check in anytime (zero tokens)
 
 ```bash
-./scripts/ralph/status.sh
+./scripts/twinloop/status.sh
 ```
 
 ---
@@ -141,8 +141,8 @@ mkdir ccna-quiz && cd ccna-quiz && git init
 Output:
 
 ```
-✅ scripts/ralph/  (ralph.sh, KIMI.md, EVALUATE.md, doctor.sh, status.sh, PROMPT_GATE.md, prompt-rules.md, prompt-gate.sh, prd.json.example)
-✅ scripts/ralph/.framework-dir
+✅ scripts/twinloop/  (twinloop.sh, KIMI.md, EVALUATE.md, doctor.sh, status.sh, PROMPT_GATE.md, prompt-rules.md, prompt-gate.sh, prd.json.example)
+✅ scripts/twinloop/.framework-dir
 ✅ memory/lessons.md (seeded)
 ✅ memory/patterns.md (seeded)
 ✅ blueprint.md (seeded — the Blueprint Gate: standards before code)
@@ -150,13 +150,13 @@ Output:
 ✅ .gitignore (created)
 ```
 
-### Step 3 — The PRD (`scripts/ralph/prd.json`)
+### Step 3 — The PRD (`scripts/twinloop/prd.json`)
 
 Notice: **small stories**, each with **testable** criteria, in priority order:
 
 ```json
 {
-  "branchName": "ralph/ccna-quiz",
+  "branchName": "twinloop/ccna-quiz",
   "userStories": [
     {
       "id": "US-001", "priority": 1, "passes": false,
@@ -199,7 +199,7 @@ Notice: **small stories**, each with **testable** criteria, in priority order:
 ### Step 4 — Doctor
 
 ```bash
-./scripts/ralph/doctor.sh
+./scripts/twinloop/doctor.sh
 ```
 
 ```
@@ -217,37 +217,37 @@ Notice: **small stories**, each with **testable** criteria, in priority order:
 ### Step 5 — Run it
 
 ```bash
-./scripts/ralph/ralph.sh 10
+./scripts/twinloop/twinloop.sh 10
 ```
 
 What you'll see (abridged):
 
 ```
 ===============================================================
-  Ralph Iteration 1 of 10 (kimi) [builder]
+  Twinloop Iteration 1 of 10 (kimi) [builder]
 ===============================================================
 ...kimi builds US-001, writes tests, runs pytest, commits...
-  Ralph Iteration 1 (kimi) [evaluator: US-001]
+  Twinloop Iteration 1 (kimi) [evaluator: US-001]
 ...independent kimi session reviews the diff, runs pytest again, approves...
 Iteration 1 complete. Continuing...
 
-  Ralph Iteration 2 of 10 (kimi) [builder]
+  Twinloop Iteration 2 of 10 (kimi) [builder]
 ...builds US-002... evaluator rejects: "invalid input 5 crashes instead of
 re-asking" → story reverted, feedback written...
-  Ralph Iteration 3 of 10 (kimi) [builder]
+  Twinloop Iteration 3 of 10 (kimi) [builder]
 ...reads evaluator feedback, fixes US-002 properly... evaluator approves...
 ...
-Ralph completed all 4 tasks! (iteration 5 of 10)
+Twinloop completed all 4 tasks! (iteration 5 of 10)
 ```
 
 ### Step 6 — What you have afterwards
 
 ```bash
-./scripts/ralph/status.sh
+./scripts/twinloop/status.sh
 ```
 
 ```
-📋 Stories (ralph/ccna-quiz):
+📋 Stories (twinloop/ccna-quiz):
   ✅ US-001  Question loader from JSON
   ✅ US-002  Multiple-choice quiz loop
   ✅ US-003  Score report at the end
@@ -263,7 +263,7 @@ Ralph completed all 4 tasks! (iteration 5 of 10)
 
 ### Step 7 — Next feature? Just write a new prd.json
 
-Change `branchName` (e.g. `ralph/review-mode`) and the stories. The loop
+Change `branchName` (e.g. `twinloop/review-mode`) and the stories. The loop
 **auto-archives** the old run to `archive/2026-08-29-ccna-quiz/` and starts
 fresh. Nothing is lost.
 
@@ -351,7 +351,7 @@ gate. It detects bad patterns, **refuses** dangerous ones, asks you clarifying
 questions, and hands you an improved rewrite:
 
 ```bash
-./scripts/ralph/prompt-gate.sh "make the app better and faster"
+./scripts/twinloop/prompt-gate.sh "make the app better and faster"
 ```
 
 Example output:
@@ -381,7 +381,7 @@ It also **learns your habits**: repeat a weakness and it will tell you
 ("this is the 3rd time — worth fixing permanently"), logged in the framework's
 `memory/prompt-habits.md`.
 
-The taxonomy it enforces lives in `scripts/ralph/prompt-rules.md` — 10 patterns
+The taxonomy it enforces lives in `scripts/twinloop/prompt-rules.md` — 10 patterns
 (P1 vague … P10 facts-without-sources), distilled from prompt-linting research.
 `doctor.sh` also runs a zero-token version of the P1 check on your prd.json.
 
@@ -392,12 +392,12 @@ The taxonomy it enforces lives in `scripts/ralph/prompt-rules.md` — 10 pattern
 | Command | What it does |
 |---|---|
 | `./install.sh <project>` | Install framework into a project (safe to re-run) |
-| `./scripts/ralph/doctor.sh` | Pre-flight check — run before every loop |
-| `./scripts/ralph/prompt-gate.sh "prompt"` | Review a prompt before sending it (bad patterns + rewrite + questions) |
-| `./scripts/ralph/ralph.sh 10` | Run the loop, max 10 builder iterations |
-| `./scripts/ralph/ralph.sh --max-daily 30 20` | Cost guard: max 30 AI sessions/day |
-| `./scripts/ralph/ralph.sh --no-eval 10` | Skip the evaluator (faster, less safe) |
-| `./scripts/ralph/status.sh` | Token-free dashboard, anytime |
+| `./scripts/twinloop/doctor.sh` | Pre-flight check — run before every loop |
+| `./scripts/twinloop/prompt-gate.sh "prompt"` | Review a prompt before sending it (bad patterns + rewrite + questions) |
+| `./scripts/twinloop/twinloop.sh 10` | Run the loop, max 10 builder iterations |
+| `./scripts/twinloop/twinloop.sh --max-daily 30 20` | Cost guard: max 30 AI sessions/day |
+| `./scripts/twinloop/twinloop.sh --no-eval 10` | Skip the evaluator (faster, less safe) |
+| `./scripts/twinloop/status.sh` | Token-free dashboard, anytime |
 | Ctrl+C, then re-run same command | Interrupt + resume (state is in files) |
 
 ## Files you'll touch vs. files that grow themselves
@@ -419,10 +419,10 @@ The taxonomy it enforces lives in `scripts/ralph/prompt-rules.md` — 10 pattern
 | "Stuck detection" stops the loop | Read the tail of `progress.txt` — the story is probably too big or ambiguous; split/clarify it, re-run |
 | Evaluator keeps rejecting a story | Read its feedback in `progress.txt` — acceptance criteria may be untestable or the tests are weak |
 | Verify phase fails after "completion" | Working as intended — it found end-to-end breakage the per-story checks missed; read the VERIFIER entry in `progress.txt`, the builder is already retrying |
-| "Verify phase stuck" note | Builder and verifier failed twice in a loop — fix or re-scope manually, `rm scripts/ralph/.verify-attempts`, re-run |
+| "Verify phase stuck" note | Builder and verifier failed twice in a loop — fix or re-scope manually, `rm scripts/twinloop/.verify-attempts`, re-run |
 | Agent did something you dislike | Say so and WHY — it logs your reason into `memory/judgment.md` and won't do it again |
 | Hit the daily cost guard | Wait for tomorrow or raise `--max-daily`; progress is saved, just re-run |
-| On Windows: `ralph.sh won't run` | Use **Git Bash**, not PowerShell/CMD |
+| On Windows: `twinloop.sh won't run` | Use **Git Bash**, not PowerShell/CMD |
 
 ## The loop in one picture
 

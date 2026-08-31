@@ -42,4 +42,4 @@
 ## 5. Stories
 - [ ] Human approved
 
-→ Turn into `scripts/ralph/prd.json`, ordered by DEMO VALUE, happy path first.
+→ Turn into `scripts/twinloop/prd.json`, ordered by DEMO VALUE, happy path first.

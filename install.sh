@@ -1,16 +1,16 @@
 #!/bin/bash
-# agent-framework installer — set up the Ralph+Kimi loop, memory, judgment,
+# agent-framework installer — set up the Twinloop+Kimi loop, memory, judgment,
 # and notification rules in ANY project.
 #
 # Usage:
 #   ./install.sh /path/to/project
 #
 # What it does:
-#   1. Copies ralph.sh + KIMI.md into <project>/scripts/ralph/
+#   1. Copies twinloop.sh + KIMI.md into <project>/scripts/twinloop/
 #   2. Writes .framework-dir so agents can locate the framework's GLOBAL memory
 #   3. Seeds empty project memory (<project>/memory/) — never overwrites
 #   4. Installs AGENTS.md rules into the project root (backs up existing)
-#   5. Warns if the target is not a git repo (Ralph needs git)
+#   5. Warns if the target is not a git repo (Twinloop needs git)
 
 set -e
 
@@ -32,23 +32,23 @@ echo "Installing agent-framework into: $TARGET"
 echo "Framework home (global memory):  $FRAMEWORK_DIR"
 echo ""
 
-# 1. Ralph loop files
-mkdir -p "$TARGET/scripts/ralph"
-cp "$FRAMEWORK_DIR/bin/ralph.sh" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/loop/KIMI.md" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/loop/EVALUATE.md" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/loop/VERIFY.md" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/bin/doctor.sh" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/bin/status.sh" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/loop/PROMPT_GATE.md" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/loop/prompt-rules.md" "$TARGET/scripts/ralph/"
-cp "$FRAMEWORK_DIR/bin/prompt-gate.sh" "$TARGET/scripts/ralph/"
-chmod +x "$TARGET/scripts/ralph/ralph.sh" "$TARGET/scripts/ralph/doctor.sh" "$TARGET/scripts/ralph/status.sh" "$TARGET/scripts/ralph/prompt-gate.sh"
-echo "✅ scripts/ralph/  (ralph.sh + KIMI.md + EVALUATE.md + VERIFY.md + doctor.sh + status.sh + prompt-gate.sh)"
+# 1. Twinloop loop files
+mkdir -p "$TARGET/scripts/twinloop"
+cp "$FRAMEWORK_DIR/bin/twinloop.sh" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/loop/KIMI.md" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/loop/EVALUATE.md" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/loop/VERIFY.md" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/bin/doctor.sh" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/bin/status.sh" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/loop/PROMPT_GATE.md" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/loop/prompt-rules.md" "$TARGET/scripts/twinloop/"
+cp "$FRAMEWORK_DIR/bin/prompt-gate.sh" "$TARGET/scripts/twinloop/"
+chmod +x "$TARGET/scripts/twinloop/twinloop.sh" "$TARGET/scripts/twinloop/doctor.sh" "$TARGET/scripts/twinloop/status.sh" "$TARGET/scripts/twinloop/prompt-gate.sh"
+echo "✅ scripts/twinloop/  (twinloop.sh + KIMI.md + EVALUATE.md + VERIFY.md + doctor.sh + status.sh + prompt-gate.sh)"
 
 # 2. Framework locator (portable link back to global memory)
-echo "$FRAMEWORK_DIR" > "$TARGET/scripts/ralph/.framework-dir"
-echo "✅ scripts/ralph/.framework-dir"
+echo "$FRAMEWORK_DIR" > "$TARGET/scripts/twinloop/.framework-dir"
+echo "✅ scripts/twinloop/.framework-dir"
 
 # 3. Project memory (never overwrite existing)
 mkdir -p "$TARGET/memory"
@@ -80,12 +80,12 @@ echo "✅ AGENTS.md (memory + judgment + notification rules)"
 # 6. Project .gitignore — keep runtime state local, keep history tracked
 GITIGNORE_BLOCK="# >>> agent-framework >>>
 # Machine-specific / regenerable loop state — stays LOCAL, never pushed.
-scripts/ralph/.framework-dir
-scripts/ralph/.last-branch
-scripts/ralph/.evaluated-stories
-scripts/ralph/.verify-attempts
-scripts/ralph/.iterations.log
-scripts/ralph/archive/
+scripts/twinloop/.framework-dir
+scripts/twinloop/.last-branch
+scripts/twinloop/.evaluated-stories
+scripts/twinloop/.verify-attempts
+scripts/twinloop/.iterations.log
+scripts/twinloop/archive/
 AGENTS.md.bak
 # NOTE: prd.json, progress.txt, user-notes.md, FINAL-REPORT.md and memory/
 # stay TRACKED — they are your history and learning system. Do not ignore them.
@@ -106,7 +106,7 @@ fi
 # 7. Git check
 if [ ! -d "$TARGET/.git" ]; then
   echo ""
-  echo "⚠️  '$TARGET' is not a git repository. Ralph commits after each story —"
+  echo "⚠️  '$TARGET' is not a git repository. Twinloop commits after each story —"
   echo "    run 'git init' there before starting the loop."
 fi
 
@@ -115,6 +115,6 @@ echo "Done! Next steps:"
 echo "  1. Open the project in your AI tool and describe your idea — the"
 echo "     Blueprint Gate (AGENTS.md) runs WITH you: requirements interview →"
 echo "     stack options → architecture → pipeline → stories, filling blueprint.md"
-echo "  2. Pre-flight check: cd $TARGET && ./scripts/ralph/doctor.sh"
-echo "  3. Start the loop:   ./scripts/ralph/ralph.sh 10"
+echo "  2. Pre-flight check: cd $TARGET && ./scripts/twinloop/doctor.sh"
+echo "  3. Start the loop:   ./scripts/twinloop/twinloop.sh 10"
 echo "  4. Track progress:   memory/, user-notes.md, progress.txt, git log"

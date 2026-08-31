@@ -1,9 +1,9 @@
 #!/bin/bash
-# Ralph Wiggum - Long-running AI agent loop (agent-framework fork)
+# Twinloop — long-running AI agent loop (fork of snarktank/ralph)
 # Features: generator-evaluator loop, stuck detection, cost guard, auto-resume,
 #           final VERIFY phase (end-to-end verification + FINAL-REPORT.md).
 #
-# Usage: ./ralph.sh [--tool kimi|amp|claude|cursor] [--max-daily N] [--no-eval] [--no-verify] [--no-progress-limit N] [max_iterations]
+# Usage: ./twinloop.sh [--tool kimi|amp|claude|cursor] [--max-daily N] [--no-eval] [--no-verify] [--no-progress-limit N] [max_iterations]
 
 set -e
 
@@ -33,7 +33,7 @@ while [[ $# -gt 0 ]]; do
         MAX_ITERATIONS="$1"
       else
         echo "Error: unrecognized argument '$1'."
-        echo "Usage: ./ralph.sh [--tool kimi|amp|claude|cursor] [--max-daily N] [--no-eval] [--no-verify] [--no-progress-limit N] [max_iterations]"
+        echo "Usage: ./twinloop.sh [--tool kimi|amp|claude|cursor] [--max-daily N] [--no-eval] [--no-verify] [--no-progress-limit N] [max_iterations]"
         exit 1
       fi
       shift ;;
@@ -126,14 +126,14 @@ if [ -f "$LAST_BRANCH_FILE" ]; then
   LAST_BRANCH=$(cat "$LAST_BRANCH_FILE" 2>/dev/null || echo "")
   if [ -n "$CURRENT_BRANCH" ] && [ -n "$LAST_BRANCH" ] && [ "$CURRENT_BRANCH" != "$LAST_BRANCH" ]; then
     DATE=$(date +%Y-%m-%d)
-    FOLDER_NAME=$(echo "$LAST_BRANCH" | sed 's|^ralph/||')
+    FOLDER_NAME=$(echo "$LAST_BRANCH" | sed 's|^twinloop/||')
     ARCHIVE_FOLDER="$ARCHIVE_DIR/$DATE-$FOLDER_NAME"
     echo "Archiving previous run: $LAST_BRANCH -> $ARCHIVE_FOLDER"
     mkdir -p "$ARCHIVE_FOLDER"
     cp "$PRD_FILE" "$ARCHIVE_FOLDER/" 2>/dev/null || true
     [ -f "$PROGRESS_FILE" ] && cp "$PROGRESS_FILE" "$ARCHIVE_FOLDER/"
     [ -f "$NOTES_FILE" ] && cp "$NOTES_FILE" "$ARCHIVE_FOLDER/"
-    echo "# Ralph Progress Log" > "$PROGRESS_FILE"
+    echo "# Twinloop Progress Log" > "$PROGRESS_FILE"
     echo "Started: $(date)" >> "$PROGRESS_FILE"
     echo "---" >> "$PROGRESS_FILE"
     rm -f "$EVAL_TRACKER" "$VERIFY_STATE"
@@ -144,12 +144,12 @@ CURRENT_BRANCH=$(jq -r '.branchName // empty' "$PRD_FILE" 2>/dev/null || echo ""
 [ -n "$CURRENT_BRANCH" ] && echo "$CURRENT_BRANCH" > "$LAST_BRANCH_FILE"
 
 if [ ! -f "$PROGRESS_FILE" ]; then
-  echo "# Ralph Progress Log" > "$PROGRESS_FILE"
+  echo "# Twinloop Progress Log" > "$PROGRESS_FILE"
   echo "Started: $(date)" >> "$PROGRESS_FILE"
   echo "---" >> "$PROGRESS_FILE"
 fi
 
-echo "Starting Ralph - Tool: $TOOL - Max iterations: $MAX_ITERATIONS - Evaluator: $USE_EVALUATOR - Verify: $USE_VERIFY - Daily cap: ${MAX_DAILY:-off} (used today: $DAILY_USED)"
+echo "Starting Twinloop - Tool: $TOOL - Max iterations: $MAX_ITERATIONS - Evaluator: $USE_EVALUATOR - Verify: $USE_VERIFY - Daily cap: ${MAX_DAILY:-off} (used today: $DAILY_USED)"
 
 # --- Final evaluation + VERIFY phase (runs where the loop used to just exit 0) ---
 
@@ -183,12 +183,12 @@ run_verify_phase() {
   attempts=${attempts:-0}
   if [[ "$attempts" -ge "$MAX_VERIFY_ATTEMPTS" ]]; then
     echo "Verify phase has failed $attempts times. Builder and verifier are going in circles — a human must step in."
-    note_for_user "verify phase stuck" "🚨 final verification failed $attempts times — the loop keeps reopening the same stories" "read progress.txt tail, fix or re-scope manually, then delete scripts/ralph/.verify-attempts and re-run"
+    note_for_user "verify phase stuck" "🚨 final verification failed $attempts times — the loop keeps reopening the same stories" "read progress.txt tail, fix or re-scope manually, then delete scripts/twinloop/.verify-attempts and re-run"
     exit 1
   fi
   echo ""
   echo "==============================================================="
-  echo "  Ralph VERIFY phase ($TOOL) [attempt $((attempts + 1))/$MAX_VERIFY_ATTEMPTS]"
+  echo "  Twinloop VERIFY phase ($TOOL) [attempt $((attempts + 1))/$MAX_VERIFY_ATTEMPTS]"
   echo "==============================================================="
   check_cost_guard
   local voutput
@@ -235,7 +235,7 @@ NO_PROGRESS=0
 for i in $(seq 1 $MAX_ITERATIONS); do
   echo ""
   echo "==============================================================="
-  echo "  Ralph Iteration $i of $MAX_ITERATIONS ($TOOL) [builder]"
+  echo "  Twinloop Iteration $i of $MAX_ITERATIONS ($TOOL) [builder]"
   echo "==============================================================="
 
   BEFORE=$(count_passing)
@@ -253,12 +253,12 @@ for i in $(seq 1 $MAX_ITERATIONS); do
     exit 1
   fi
   if echo "$OUTPUT" | grep -q "<promise>COMPLETE</promise>"; then
-    echo ""; echo "Ralph completed all tasks! (iteration $i of $MAX_ITERATIONS)"
+    echo ""; echo "Twinloop completed all tasks! (iteration $i of $MAX_ITERATIONS)"
     if finish_run; then exit 0; fi
     continue
   fi
   if echo "$OUTPUT" | grep -q "<promise>COMPLETE_WITH_BLOCKERS</promise>"; then
-    echo ""; echo "Ralph finished with blocked stories (iteration $i of $MAX_ITERATIONS)."
+    echo ""; echo "Twinloop finished with blocked stories (iteration $i of $MAX_ITERATIONS)."
     echo "Check user-notes.md for 🚨 blocked items."
     if finish_run; then exit 0; fi
     continue
@@ -269,7 +269,7 @@ for i in $(seq 1 $MAX_ITERATIONS); do
     UNEVAL=$(unevaluated_ids)
     if [ -n "$UNEVAL" ]; then
       echo ""
-      echo "  Ralph Iteration $i ($TOOL) [evaluator: $(echo $UNEVAL | tr '\n' ' ')]"
+      echo "  Twinloop Iteration $i ($TOOL) [evaluator: $(echo $UNEVAL | tr '\n' ' ')]"
       check_cost_guard
       EVAL_OUTPUT=$(run_agent "$SCRIPT_DIR/EVALUATE.md") || true
       echo "$TODAY" >> "$ITER_LOG"
@@ -281,9 +281,9 @@ for i in $(seq 1 $MAX_ITERATIONS); do
   if [[ "$TOTAL" -gt 0 && $((PASSING + BLOCKED)) -ge "$TOTAL" && -z "$(unevaluated_ids)" ]]; then
     echo ""
     if [[ "$BLOCKED" -gt 0 ]]; then
-      echo "Ralph finished: $PASSING/$TOTAL stories passing, $BLOCKED blocked. Check user-notes.md."
+      echo "Twinloop finished: $PASSING/$TOTAL stories passing, $BLOCKED blocked. Check user-notes.md."
     else
-      echo "Ralph completed all $TOTAL tasks! (detected via prd.json state)"
+      echo "Twinloop completed all $TOTAL tasks! (detected via prd.json state)"
     fi
     if finish_run; then exit 0; fi
     continue
@@ -310,6 +310,6 @@ for i in $(seq 1 $MAX_ITERATIONS); do
 done
 
 echo ""
-echo "Ralph reached max iterations ($MAX_ITERATIONS) without completing all tasks."
+echo "Twinloop reached max iterations ($MAX_ITERATIONS) without completing all tasks."
 echo "Check $PROGRESS_FILE for status. Re-run the same command to continue."
 exit 1

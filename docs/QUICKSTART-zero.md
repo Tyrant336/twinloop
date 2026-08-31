@@ -77,8 +77,8 @@ git init                         # the loop needs git (it commits per task)
 Expected output (the ✅ lines):
 
 ```
-✅ scripts/ralph/  (ralph.sh + KIMI.md + EVALUATE.md + VERIFY.md + ...)
-✅ scripts/ralph/.framework-dir
+✅ scripts/twinloop/  (twinloop.sh + KIMI.md + EVALUATE.md + VERIFY.md + ...)
+✅ scripts/twinloop/.framework-dir
 ✅ memory/lessons.md (seeded)
 ✅ blueprint.md (seeded — the Blueprint Gate: standards before code)
 ✅ AGENTS.md (memory + judgment + notification rules)
@@ -112,7 +112,7 @@ vitest") with honest pros and cons. **You pick one.** If you have no
 preference, say: *"I'm a beginner, pick whichever is simplest for me to run."*
 
 Finally it fills in `blueprint.md` and writes the task list
-(`scripts/ralph/prd.json`). When it's done, exit kimi (Ctrl+C or `/exit`).
+(`scripts/twinloop/prd.json`). When it's done, exit kimi (Ctrl+C or `/exit`).
 
 **Now do the one human approval step:** open `blueprint.md` in any editor and
 change every `- [ ]` to `- [x]` after reading each section. You're saying
@@ -122,7 +122,7 @@ point: nothing gets coded without your approval.
 ## Step 3 — Look at the task list (2 minutes, just look)
 
 ```bash
-cat scripts/ralph/prd.json
+cat scripts/twinloop/prd.json
 ```
 
 You'll see a few stories. Notice each has `acceptanceCriteria`. Compare:
@@ -136,7 +136,7 @@ If any criterion reads like the ❌ example, edit it now — **vague tasks are t
 ## Step 4 — Pre-flight check (30 seconds)
 
 ```bash
-./scripts/ralph/doctor.sh
+./scripts/twinloop/doctor.sh
 ```
 
 Expected: mostly ✅, ending with something like:
@@ -152,14 +152,14 @@ exactly how to fix it. Don't start the loop until there are zero ❌.
 ## Step 5 — Run the loop (the AI works alone now)
 
 ```bash
-./scripts/ralph/ralph.sh 5
+./scripts/twinloop/twinloop.sh 5
 ```
 
 You'll see iterations like:
 
 ```
 ===============================================================
-  Ralph Iteration 1 of 5 (kimi) [builder]
+  Twinloop Iteration 1 of 5 (kimi) [builder]
 ===============================================================
 ...the AI reads the task list, builds one story, runs tests, commits...
 ```
@@ -167,7 +167,7 @@ You'll see iterations like:
 Then possibly:
 
 ```
-  Ralph Iteration 1 (kimi) [evaluator: US-001]
+  Twinloop Iteration 1 (kimi) [evaluator: US-001]
 ...a second AI reviews the diff and re-runs the tests...
 ```
 
@@ -180,8 +180,8 @@ While it runs (in a second Git Bash window), you can peek — for free, no AI
 session needed:
 
 ```bash
-./scripts/ralph/status.sh        # story board: ✅ done / 🚫 blocked / ⬜ todo
-cat scripts/ralph/user-notes.md  # plain-English notes the AI left for you
+./scripts/twinloop/status.sh        # story board: ✅ done / 🚫 blocked / ⬜ todo
+cat scripts/twinloop/user-notes.md  # plain-English notes the AI left for you
 ```
 
 ## Step 6 — The end: verify + YOUR acceptance
@@ -226,14 +226,14 @@ git push    # only if you have a remote set up; your call, not the loop's
 |---|---|
 | `Blueprint Gate is not satisfied` | You skipped the checkboxes → open `blueprint.md`, tick all `- [x]` |
 | `jq: command not found` | Step 0 → install jq, reopen Git Bash |
-| `Stuck detection... stopping early` | A task failed 3× → `tail -30 scripts/ralph/progress.txt` tells you why; usually the story was too big or vague → edit prd.json, re-run |
+| `Stuck detection... stopping early` | A task failed 3× → `tail -30 scripts/twinloop/progress.txt` tells you why; usually the story was too big or vague → edit prd.json, re-run |
 | Evaluator rejected a story | Normal — read the feedback in `progress.txt`; the builder retries automatically |
 | Verify FAILED after "completion" | Also normal — it found a real end-to-end bug; the loop is fixing it |
 | `daily limit reached` | Cost guard → wait or re-run with `--max-daily 30` |
 | Weird errors, colors broken | You're in PowerShell → use Git Bash |
-| `Verify phase has failed 2 times` | AI is going in circles → you fix the issue, then `rm scripts/ralph/.verify-attempts` and re-run |
+| `Verify phase has failed 2 times` | AI is going in circles → you fix the issue, then `rm scripts/twinloop/.verify-attempts` and re-run |
 
-Golden rule: **read `scripts/ralph/progress.txt` first.** It's the AI's diary
+Golden rule: **read `scripts/twinloop/progress.txt` first.** It's the AI's diary
 and almost always says exactly what's wrong.
 
 ## Cheat sheet (print this)
@@ -242,9 +242,9 @@ and almost always says exactly what's wrong.
 ./install.sh <project>          # one-time setup per project
 kimi                            # describe idea → Blueprint Gate interview
 # → tick all boxes in blueprint.md
-./scripts/ralph/doctor.sh       # pre-flight (zero ❌ before continuing)
-./scripts/ralph/ralph.sh 10     # start the loop, walk away
-./scripts/ralph/status.sh       # peek anytime (free)
+./scripts/twinloop/doctor.sh       # pre-flight (zero ❌ before continuing)
+./scripts/twinloop/twinloop.sh 10     # start the loop, walk away
+./scripts/twinloop/status.sh       # peek anytime (free)
 cat FINAL-REPORT.md             # when done: read, try the program, tick the box
 ```
 
