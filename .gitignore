@@ -1,13 +1,41 @@
-# Ralph working files (generated during runs)
-prd.json
-progress.txt
-.last-branch
+# agent-framework .gitignore
+# Goal: runtime/machine-specific state stays LOCAL and never leaks to GitHub,
+# while the valuable history (memory/, templates, docs) IS tracked and saved.
 
-# Archive is optional to commit
-# archive/
-
-# OS files
+# --- OS junk ---
 .DS_Store
+Thumbs.db
+desktop.ini
 
-#Claude
-.claude/
+# --- Node (flowchart/) ---
+node_modules/
+flowchart/dist/
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+
+# --- Runtime state (regenerable or machine-specific — never commit) ---
+archive/
+.last-branch
+.evaluated-stories
+.iterations.log
+*.bak
+
+# --- Editor ---
+.vscode/
+.idea/
+
+# --- Secrets (defense in depth: never commit these, ever) ---
+.env
+.env.*
+*.pem
+*.key
+
+# NOTE: memory/ is TRACKED on purpose in your PRIVATE copy — it is the learning
+# system, and its history should be saved. But it contains personal preferences.
+# PUBLIC RELEASE: memory/ and user-notes.md are excluded (below); users get empty
+# seeds from templates/project-memory/ on install.
+memory/
+user-notes.md

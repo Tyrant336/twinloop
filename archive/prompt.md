@@ -4,6 +4,11 @@ You are an autonomous coding agent working on a software project.
 
 ## Your Task
 
+0. **Blueprint gate:** if `prd.json` does not exist, or `blueprint.md` (project
+   root) is missing or still has unchecked approval boxes (`- [ ]`), do NOT
+   implement anything. Tell the user the Blueprint Gate must run first
+   (see AGENTS.md → "Blueprint Gate": requirements → stack decision →
+   architecture → pipeline → stories, each human-approved) and STOP.
 1. Read the PRD at `prd.json` (in the same directory as this file)
 2. Read the progress log at `progress.txt` (check Codebase Patterns section first)
 3. Check you're on the correct branch from PRD `branchName`. If not, check it out or create from main.
